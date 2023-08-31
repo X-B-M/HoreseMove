@@ -4,9 +4,12 @@ import random
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 from sys import argv
-from random import shuffle
+from sys import setrecursionlimit
+from splitting_rectangle import splitting_rectangle_optimum
+from splitting_rectangle import fill_all_small_rectangle_optimum
 import time
 
+setrecursionlimit(5000)
 SIZE_POLE_QUADRO = 0
 SIZE_POLE_HALF_X = 0
 SIZE_POLE_HALF_Y = 0
@@ -27,49 +30,6 @@ LIST_MOVE = [(-1, -2), (1, -2),
 
 #random.seed(time.time())
 #shuffle(LIST_MOVE)
-
-def splitting_rectangle(N, M):
-    ''' разбиваем прямоугольник N * M на несколько меньших
-        таких, что почти все x * y < 36
-    '''
-    delitel_x = 6
-    x = []
-    while delitel_x * (len(x) + 2) <= N:
-        # while N % delitel_x != 0 and N % delitel_x <= 4:
-        x.append(delitel_x)
-    tmp = N - delitel_x * (len(x))
-    if tmp == delitel_x * 2 - 1 and tmp > 8:
-        x.append(delitel_x)      # 7
-        x.append(delitel_x - 1)  # 6
-    elif tmp == delitel_x * 2 - 2 and tmp > 8:
-        x.append(delitel_x - 1)  # 6
-        x.append(delitel_x - 1)  # 6
-    elif tmp == delitel_x * 2 - 3 and tmp > 8:
-        x.append(delitel_x - 2)  # 6
-        x.append(delitel_x - 1)  # 5
-    elif tmp == delitel_x * 2 - 4 and tmp > 8:
-        x.append(delitel_x - 2)  # 5
-        x.append(delitel_x - 2)  # 5
-    elif tmp != 0:
-        x.append(tmp)
-
-    #    x = [delitel_x for i in range(N // delitel_x)]
-    #    if N % delitel_x != 0:
-    #        x.append(N % delitel_x)
-
-    delitel_y = 5
-    y = []
-    while delitel_y * (len(y) + 2) <= M:
-        y.append(delitel_y)
-    tmp = M - delitel_y * len(y)
-
-    if tmp != 0:
-        y.append(tmp)
-
-    x.sort(reverse=True)
-    #    y.sort(reverse=True)
-    rezult = [x, y]
-    return rezult
 
 
 def fill_zero(pole, aa, n, m):  # глобальные переменные инициализируются в этой функции
@@ -153,69 +113,6 @@ def move_horse(N: int, x: int, y: int, pole: list, index_max_n: int) -> object:
             y -= i[1]
 
 
-def fill_all_small_rectangle(pole, aa):
-    """  малые поля заполняем -1*i*k, что и будет признаком заполнения малого поля"""
-
-    max_num_g = 0
-    max_num_index = 0
-    for i in aa[0]:
-        max_num_index += i
-    pole_i = 2
-    pole_k = 2
-    for k in range(0,len(aa[1]), 2):
-        for k_1 in range(aa[1][k]):
-            max_num = max_num_g
-            for i in range(len(aa[0])):
-                max_num += aa[0][i]*aa[1][k]
-                for i_1 in range(aa[0][i]):
-                    print(f'{max_num:4.0f} ', sep=" ", end="")
-                    pole[pole_i][pole_k] = -1 * max_num
-                    pole_i += 1
-            print()
-            pole_i = 2
-            pole_k += 1
-
-        max_num_list = [0 for r in range(max_num_index)]
-
-        if k+1 < len(aa[1]):
-            for i in range(len(aa[0])-1,-1,-1):
-                max_num += aa[0][i] * aa[1][k+1]
-                for i_1 in range(aa[0][i]):
-                    max_num_index -= 1
-                    max_num_list[max_num_index] = max_num
-    #        print()
-#        print(*max_num_list)
-        max_num_g = max_num_list[0]
-
-        if k+1 < len(aa[1]):
-            for k_1 in range(aa[1][k+1]):
-                max_num_index = 0
-                for i in range(len(aa[0])-1,-1,-1):
-                    for i_1 in range(aa[0][i]):
-                        print(f'{max_num_list[max_num_index]:4.0f} ', sep=" ", end="")
-                        pole[pole_i][pole_k] = -1 * max_num_list[max_num_index]
-                        pole_i += 1
-                        max_num_index += 1
-                pole_i = 2
-                pole_k += 1
-                print()
-
-        print()
-    #b=input()
-
-    for j in range(len(pole[0])):
-        print(f'j={j:2d}, ',end='')
-        for i in range(len(pole)):
-            if pole[i][j] >= 0:
-                print(f'{"    ."}', end='')
-            else:
-                print(f'{pole[i][j]:5d}', end='')
-
-        print()
-    print('-'*(5*(SIZE_POLE_X+2+2+1)+1))
-
-
-
 #print()
 
 
@@ -225,14 +122,14 @@ if __name__ == '__main__':
     SIZE_POLE_Y = int(param[2])
 
     # разбиваем поле на малые поля
-    aa = splitting_rectangle(SIZE_POLE_X, SIZE_POLE_Y)
-    print(*aa)
+    aa = splitting_rectangle_optimum(SIZE_POLE_X, SIZE_POLE_Y)
+    print(SIZE_POLE_X, SIZE_POLE_Y, *aa)
 
     # заполняем большую матрицу -1
     pole = [[0 for i in range(SIZE_POLE_Y + 2 + 2)] for j in range(SIZE_POLE_X + 2 + 2)]
 
     # заполняем отдельные прямоугольники соответствующими отрицательными значениями
-    fill_all_small_rectangle(pole, aa)
+    fill_all_small_rectangle_optimum(pole, aa)
     fill_zero(pole, aa, SIZE_POLE_X, SIZE_POLE_Y)
 
     move_horse(1, 0 + 2, 0 + 2, pole, 0)
