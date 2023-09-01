@@ -9,7 +9,7 @@ from splitting_rectangle import splitting_rectangle_optimum
 from splitting_rectangle import fill_all_small_rectangle_optimum
 import time
 
-setrecursionlimit(5000)
+
 SIZE_POLE_QUADRO = 0
 SIZE_POLE_HALF_X = 0
 SIZE_POLE_HALF_Y = 0
@@ -71,7 +71,7 @@ def print_pole_norm(pole):
                 print('    .', end='')
 
         print()
-    print(f'{(time.time()-TIME_START)//60:5.0f}минут, {(time.time()-TIME_START)%60:2.0f}секунд'+'-'*(5*(SIZE_POLE_X-4)))
+    print(f'{(time.time()-TIME_START)//60:5.0f} мин., {(time.time()-TIME_START)%60:2.0f} сек.'+'-'*(5*(SIZE_POLE_X-4)+1))
     TIME_PREV = time.time()
 
 def move_horse(N: int, x: int, y: int, pole: list, index_max_n: int) -> object:
@@ -121,6 +121,7 @@ if __name__ == '__main__':
     SIZE_POLE_X = int(param[1])
     SIZE_POLE_Y = int(param[2])
 
+    setrecursionlimit(int(SIZE_POLE_X * SIZE_POLE_Y * 1.2))
     # разбиваем поле на малые поля
     aa = splitting_rectangle_optimum(SIZE_POLE_X, SIZE_POLE_Y)
     print(SIZE_POLE_X, SIZE_POLE_Y, *aa)
