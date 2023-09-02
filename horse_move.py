@@ -13,6 +13,9 @@ import time
 SIZE_POLE_QUADRO = 0
 SIZE_POLE_HALF_X = 0
 SIZE_POLE_HALF_Y = 0
+SIZE_POLE_X = 0
+SIZE_POLE_Y = 0
+
 POLE_FIILED = 0
 POLE_LIST_MAX = []
 TIME_PREV = time.time()
@@ -115,13 +118,28 @@ def move_horse(N: int, x: int, y: int, pole: list, index_max_n: int) -> object:
 
 #print()
 
-
-if __name__ == '__main__':
+def main(argv):
+    """ Заполнение прямоугольной области 'ходом коня'
+        Пример запуска для заполнения квадрата 5 на 5 клеток:
+        horse_move.py 5 5
+    """
     param = argv
-    SIZE_POLE_X = int(param[1])
-    SIZE_POLE_Y = int(param[2])
+    global SIZE_POLE_X
+    global SIZE_POLE_Y
 
-    setrecursionlimit(int(SIZE_POLE_X * SIZE_POLE_Y * 1.2))
+    if len(param) == 1:
+        print(main.__doc__)
+        return 0
+    elif len(param) == 2:
+        SIZE_POLE_X = int(param[1])
+        SIZE_POLE_Y = 5
+    else:
+        SIZE_POLE_X = int(param[1])
+        SIZE_POLE_Y = int(param[2])
+
+    if int(SIZE_POLE_X * SIZE_POLE_Y * 1.2)> 1000:
+        setrecursionlimit(int(SIZE_POLE_X * SIZE_POLE_Y * 1.2))
+
     # разбиваем поле на малые поля
     aa = splitting_rectangle_optimum(SIZE_POLE_X, SIZE_POLE_Y)
     print(SIZE_POLE_X, SIZE_POLE_Y, *aa)
@@ -134,4 +152,8 @@ if __name__ == '__main__':
     fill_zero(pole, aa, SIZE_POLE_X, SIZE_POLE_Y)
 
     move_horse(1, 0 + 2, 0 + 2, pole, 0)
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+
+if __name__ == '__main__':
+    main(argv)
+

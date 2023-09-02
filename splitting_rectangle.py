@@ -47,8 +47,9 @@ def splitting_rectangle_optimum(N, M):
         for x1 in x:
             if y1 * x1 > 45:
                 tmp_x = x1 // 2
-                xy[-1].append(tmp_x)
                 xy[-1].append(x1 - tmp_x)
+                xy[-1].append(tmp_x)
+
             else:
                 xy[-1].append(x1)
 
