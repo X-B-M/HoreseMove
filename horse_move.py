@@ -132,7 +132,7 @@ def main(argv):
         return 0
     elif len(param) == 2:
         SIZE_POLE_X = int(param[1])
-        SIZE_POLE_Y = 5
+        SIZE_POLE_Y = int(param[1])
     else:
         SIZE_POLE_X = int(param[1])
         SIZE_POLE_Y = int(param[2])
