@@ -118,8 +118,16 @@ def move_horse(N: int, x: int, y: int, pole: list, index_max_n: int) -> object:
 
 if __name__ == '__main__':
     param = argv
-    SIZE_POLE_X = int(param[1])
-    SIZE_POLE_Y = int(param[2])
+  
+    if len(param) == 1:
+        SIZE_POLE_X = 10
+        SIZE_POLE_Y = 10
+    elif len(param) == 2:
+        SIZE_POLE_X = int(param[1])
+        SIZE_POLE_Y = int(param[1])
+    else:
+        SIZE_POLE_X = int(param[1])
+        SIZE_POLE_Y = int(param[2])
 
     # разбиваем поле на малые поля
     aa = splitting_rectangle_optimum(SIZE_POLE_X, SIZE_POLE_Y)
